@@ -50,7 +50,7 @@ function Home() {
     const groups: Team[] = [];
     for (let i = 0; i < teamNames.length; i++) {
       groups.push({
-        name: `Group ${i + 1}`,
+        name: teamNames[i].name,
         players: [],
         totalScore: 0,
       });
