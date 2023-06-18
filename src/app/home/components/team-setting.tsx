@@ -30,6 +30,16 @@ function ListTeamName(props: ListTeamNameProps) {
   }
   return (
     <div className='mt-[24px] flex flex-col gap-[16px]'>
+      <Button
+        type='primary'
+        rootClassName='absolute -top-[70px] -left-[80px] w-fit text-[30px] font-bold m-auto'
+        size='large'
+        disabled={!count}
+        onClick={() => onSubmit(listNames)}
+      >
+        Generate Team
+      </Button>
+
       {listNames.map(item => (
         <div className='flex items-center'>
           <span className='mr-[8px] text-z-base'>{item.key}.</span>
@@ -42,16 +52,6 @@ function ListTeamName(props: ListTeamNameProps) {
           />
         </div>
       ))}
-
-      <Button
-        type='primary'
-        rootClassName='w-fit font-bold m-auto'
-        size='large'
-        disabled={!count}
-        onClick={() => onSubmit(listNames)}
-      >
-        Generate Team
-      </Button>
     </div>
   );
 }

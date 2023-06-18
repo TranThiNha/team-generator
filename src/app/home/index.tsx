@@ -24,13 +24,39 @@ function Home() {
 
     for (let i = 0; i < players.length; i++) {
       const currentPlayer: Player = players[i];
-      const smallestTeam = teams.reduce((prev, current) =>
-        current.totalScore < prev.totalScore ? current : prev,
-      );
+      let smallestTeams: Team[] = [];
+      let smallestScore = teams.sort((a, b) => a.totalScore - b.totalScore)[0]
+        .totalScore;
 
-      smallestTeam.players.push(currentPlayer);
-      smallestTeam.totalScore += currentPlayer.score || 0;
+      for (let j = 0; j < teams.length; j++) {
+        const currentTeam = teams[j];
+        if (currentTeam.totalScore < smallestScore) {
+          smallestScore = currentTeam.totalScore;
+          smallestTeams = [currentTeam];
+        } else if (currentTeam.totalScore === smallestScore) {
+          smallestTeams.push(currentTeam);
+        }
+      }
+      if (smallestTeams.length === 0) {
+        smallestTeams = teams;
+      }
+      let randomIndex = Math.floor(Math.random() * (smallestTeams.length - 1));
+      const smallestPlayer = smallestTeams.sort(
+        (a, b) => a.players.length - b.players.length,
+      );
+      if (
+        smallestPlayer.length > 1 &&
+        smallestPlayer[0].players.length < smallestPlayer[1].players.length
+      ) {
+        randomIndex = 0;
+      }
+      const randomTeam = smallestTeams[randomIndex];
+      if (randomTeam) {
+        randomTeam.players.push(currentPlayer);
+        randomTeam.totalScore += currentPlayer.score || 0;
+      }
     }
+
     return teams;
   }
 
@@ -45,13 +71,16 @@ function Home() {
 
   return (
     <div className='m-auto w-[80vw] p-[16px]'>
+      <div className='m-auto mb-[90px] w-[70vw]'>
+        <GeneratedTeam items={teams} />
+      </div>
+
       <Row gutter={16}>
         <Col span={12}>
           <ListPlayer selected={selectedPlayer} onSelect={onSelectPlayer} />
         </Col>
         <Col span={12}>
           <TeamSetting onSubmit={onSubmit} />
-          <GeneratedTeam items={teams} />
         </Col>
       </Row>
     </div>
