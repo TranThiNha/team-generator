@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  padding: 0;
+  margin: 0;
+
+  .ant-layout {
+    .list-player {
+      .ant-card-body {
+        padding: 0;
+      }
+    }
+    .ant-list {
+      .ant-list-item {
+        .ant-list-item-meta {
+          align-items: center;
+          .ant-list-item-meta-title {
+            font-weight: normal;
+            font-size: 15px;
+            margin-bottom: 0;
+          }
+        }
+
+        .ant-checkbox {
+          margin-right: 8px;
+          .ant-checkbox-inner {
+            width: 18px;
+            height: 18px;
+          }
+        }
+      }
+    }
+  }
+}
