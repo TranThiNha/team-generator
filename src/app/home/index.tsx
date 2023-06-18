@@ -13,51 +13,71 @@ function Home() {
     setTeams(generatedTeams);
   }
 
+  function splitArrayByConsecutiveValues(arr: Player[]): Player[][] {
+    const result: Player[][] = [];
+    let currentSubarray: Player[] = [];
+
+    for (let i = 0; i < arr.length; i++) {
+      const currentValue = arr[i].score;
+      const previousValue = arr[i - 1]?.score || 0;
+
+      if (i === 0 || currentValue !== previousValue) {
+        // Start a new subarray if it's the first element or the value is different
+        currentSubarray = [arr[i]];
+        result.push(currentSubarray);
+      } else {
+        // Add the value to the current subarray if it's the same as the previous value
+        currentSubarray.push(arr[i]);
+      }
+    }
+    return result;
+  }
+
   function generateTeams(players: Player[], teamNames: TeamName[]) {
-    players.sort((a, b) => (b.score || 0) - (a.score || 0)); // Sort players by score in descending order
-
-    const teams: Team[] = teamNames.map(item => ({
-      name: item.name,
-      players: [],
-      totalScore: 0,
-    }));
-
-    for (let i = 0; i < players.length; i++) {
-      const currentPlayer: Player = players[i];
-      let smallestTeams: Team[] = [];
-      let smallestScore = teams.sort((a, b) => a.totalScore - b.totalScore)[0]
-        .totalScore;
-
-      for (let j = 0; j < teams.length; j++) {
-        const currentTeam = teams[j];
-        if (currentTeam.totalScore < smallestScore) {
-          smallestScore = currentTeam.totalScore;
-          smallestTeams = [currentTeam];
-        } else if (currentTeam.totalScore === smallestScore) {
-          smallestTeams.push(currentTeam);
-        }
-      }
-      if (smallestTeams.length === 0) {
-        smallestTeams = teams;
-      }
-      let randomIndex = Math.floor(Math.random() * (smallestTeams.length - 1));
-      const smallestPlayer = smallestTeams.sort(
-        (a, b) => a.players.length - b.players.length,
-      );
-      if (
-        smallestPlayer.length > 1 &&
-        smallestPlayer[0].players.length < smallestPlayer[1].players.length
-      ) {
-        randomIndex = 0;
-      }
-      const randomTeam = smallestTeams[randomIndex];
-      if (randomTeam) {
-        randomTeam.players.push(currentPlayer);
-        randomTeam.totalScore += currentPlayer.score || 0;
+    let shuffledPlayer: Player[] = [];
+    const segmentScores = splitArrayByConsecutiveValues(players);
+    for (const segment of segmentScores) {
+      if (segment.length > 1) {
+        const shuffledPeople = segment.sort(() => Math.random() - 0.5);
+        shuffledPlayer = shuffledPlayer.concat(shuffledPeople);
+        console.log('shuffledPeople', shuffledPeople);
+      } else {
+        shuffledPlayer = shuffledPlayer.concat(segment);
       }
     }
 
-    return teams;
+    // Initialize groups
+    const groups: Team[] = [];
+    for (let i = 0; i < teamNames.length; i++) {
+      groups.push({
+        name: `Group ${i + 1}`,
+        players: [],
+        totalScore: 0,
+      });
+    }
+
+    const randomIndex = Math.floor(Math.random() * groups.length);
+    let index = 0;
+    for (const person of shuffledPlayer) {
+      let minScoreGroup = groups[0];
+      for (const group of groups) {
+        if (index === 0) {
+          minScoreGroup = groups[randomIndex];
+        } else {
+          if (
+            group.totalScore < minScoreGroup.totalScore ||
+            group.players.length < minScoreGroup.players.length
+          ) {
+            minScoreGroup = group;
+          }
+        }
+        index++;
+      }
+      minScoreGroup.players.push(person);
+      minScoreGroup.totalScore += person.score || 0;
+    }
+
+    return groups;
   }
 
   function onSelectPlayer(obj: Player) {
