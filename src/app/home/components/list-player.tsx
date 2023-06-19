@@ -27,12 +27,17 @@ function getListAdding() {
     if (key.includes('player-add-')) {
       const name = localStorage.getItem(key);
       if (name) {
+        const id = Number(key.replace('player-add-', ''));
+        const score = localStorage.getItem(`player-${id}`);
         listPlayerAdd.push({
-          id: Number(key.replace('player-add-', '')),
+          id,
           name,
           avt: '',
+          score: Number(score) || 0,
           isAdding: true,
         });
+      } else {
+        localStorage.removeItem(key);
       }
     }
   }
