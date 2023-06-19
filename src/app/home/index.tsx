@@ -90,7 +90,7 @@ function Home() {
   }
 
   return (
-    <div className='m-auto w-[80vw] p-[16px]'>
+    <div className='m-auto mb-[40px] w-[80vw] p-[16px]'>
       <div className='m-auto mb-[90px] w-[70vw]'>
         <GeneratedTeam items={teams} />
       </div>

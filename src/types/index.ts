@@ -3,6 +3,7 @@ export type Player = {
   name: string;
   avt: string;
   score?: number;
+  isAdding?: boolean;
 };
 
 export type TeamName = {

@@ -1,6 +1,7 @@
 import { Team } from '../../../types';
 import { Avatar, Card } from 'antd';
 import clsx from 'clsx';
+import personIcon from '../../../assets/person.png';
 
 function GeneratedTeam(props: { items: Team[] }) {
   const { items } = props;
@@ -32,7 +33,7 @@ function GeneratedTeam(props: { items: Team[] }) {
                 className='list-player mb-[16px] flex w-full'
               >
                 <div className='flex items-center px-[16px] py-[12px]'>
-                  <Avatar size='large' src={player.avt} />
+                  <Avatar size='large' src={player.avt || personIcon} />
                   <div className='ml-[12px] text-z-base font-medium'>
                     {player.name} ({player.score || 0})
                   </div>
