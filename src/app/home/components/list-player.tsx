@@ -1,9 +1,10 @@
-import { Avatar, Button, Card, Checkbox, Input, List } from 'antd';
+import { Avatar, Button, Card, Checkbox, Input, List, Flex } from 'antd';
 import { Player } from '../../../types';
 import { LIST_PLAYER } from '../../../constants';
 import { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import personIcon from '../../../assets/person.png';
+import Exporter from './exporter';
 
 type ListPlayerProps = {
   selected: Player[];
@@ -147,14 +148,17 @@ function ListPlayer(props: ListPlayerProps) {
         />
       </Card>
 
-      <Button
-        className='mt-[16px]'
-        type='primary'
-        icon={<PlusOutlined />}
-        onClick={addPeople}
-      >
-        Add participant
-      </Button>
+      <Flex gap="small" wrap="wrap">
+        <Button
+          className='mt-[16px]'
+          type='primary'
+          icon={<PlusOutlined />}
+          onClick={addPeople}
+        >
+          Add participant
+        </Button>
+        <Exporter players={items} />
+      </Flex>
     </div>
   );
 }
